@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Catch The Fruits</string>
+    <string name="titlePlay">Play</string>
+    <string name="titleQuit">Quit</string>
+</resources>
