@@ -1,0 +1,193 @@
+package com.example.catchthefruits
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.graphics.*
+import android.os.Handler
+import android.view.MotionEvent
+import android.view.View
+import kotlin.random.Random
+
+
+class GameView(context: Context) : View(context) {
+
+
+    /**
+     * Declarations
+     * **/
+    private val background: Bitmap = TODO()
+    private val ground: Bitmap
+    private val basket: Bitmap
+    private val rectBackground: Rect
+    private val rectGround: Rect
+    private val handler = Handler()
+    private val context: Context = TODO()
+    private val textPaint = Paint().apply {
+        color = Color.rgb(255, 165, 0)
+        textSize = TEXT_SIZE
+        textAlign = Paint.Align.LEFT
+    }
+    private val healthPaint = Paint().apply { color = Color.GREEN }
+    private val random = Random
+    private var basketX = 0f
+    private var basketY = 0f
+    private var oldX = 0f
+    private var oldBasketX = 0f
+    private val bombs = mutableListOf<Bomb>()
+    private val explosions = mutableListOf<Explosion>()
+    private var points = 0
+    private var life = 3
+    private val runnable = Runnable { invalidate() }
+
+    companion object {
+        private const val UPDATE_MILLIS = 30
+        private const val TEXT_SIZE = 120f
+        var dWidth = 0
+        var dHeight = 0
+    }
+
+    /**
+     *
+     * */
+    init {
+        background = BitmapFactory.decodeResource(context.resources, R.drawable.game_bg)
+        ground = BitmapFactory.decodeResource(context.resources, R.drawable.game_ground)
+        basket = BitmapFactory.decodeResource(context.resources, R.drawable.fruit_basket)
+
+        val display = (context as Activity).windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        dWidth = size.x
+        dHeight = size.y
+
+        rectBackground = Rect(0, 0, dWidth, dHeight)
+        rectGround = Rect(0, dHeight - ground.height, dWidth, dHeight)
+
+        basketX = (dWidth / 2 - basket.width / 2).toFloat()
+        basketY = (dHeight - ground.height - basket.height).toFloat()
+        for (i in 0 until 3) {
+            bombs.add(Bomb(context))
+        }
+    }
+
+    /**
+     * Drawing on the canvas
+     * **/
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawBitmap(background, null, rectBackground, null)
+        canvas.drawBitmap(ground, null, rectGround, null)
+        canvas.drawBitmap(basket, basketX, basketY, null)
+
+        /**
+         * Bombing animation and such
+         * */
+        for (i in bombs.indices) {
+            canvas.drawBitmap(
+                bombs[i].getBomb(bombs[i].bombFrame),
+                bombs[i].bombX,
+                bombs[i].bombY,
+                null
+            )
+            bombs[i].bombFrame++
+            if (bombs[i].bombFrame > 2) {
+                bombs[i].bombFrame = 0
+            }
+            bombs[i].bombY += bombs[i].bombVelocity
+            if (bombs[i].bombY + bombs[i].getBombHeight() >= dHeight - ground.height) {
+                points += 10
+                val explosion = Explosion(context)
+                explosion.explosionX = bombs[i].bombX
+                explosion.explosionY = bombs[i].bombY
+                explosions.add(explosion)
+                bombs[i].resetPosition()
+            }
+        }
+
+
+        /**
+         * Bombing
+         * */
+        for (i in bombs.indices) {
+            if (bombs[i].bombX + bombs[i].getBombWidth() >= basketX
+                && bombs[i].bombY <= basketX + basket.width
+                && bombs[i].bombY + bombs[i].getBombHeight() >= basketY
+                && bombs[i].bombY + bombs[i].getBombHeight() <= basketY + basket.height
+            ) {
+                life--
+                bombs[i].resetPosition()
+                if (life == 0) {
+                    val intent = Intent(context, GameOver::class.java)
+                    intent.putExtra("points", points)
+                    context.startActivity(intent)
+                    (context as Activity).finish()
+                }
+            }
+        }
+
+        /**
+         * When it explodes
+         * */
+        for (i in explosions.indices) {
+            canvas.drawBitmap(
+                explosions[i].getExplosion(explosions[i].explosionFrame),
+                explosions[i].explosionX, explosions[i].explosionY, null
+            )
+            explosions[i].explosionFrame++
+            if (explosions[i].explosionFrame > 3) {
+                explosions.removeAt(i)
+            }
+        }
+
+        when (life) {
+            2 -> healthPaint.color = Color.YELLOW
+            1 -> healthPaint.color = Color.RED
+        }
+        canvas.drawRect(
+            (dWidth - 200).toFloat(), 30F,
+            (dWidth - 200 + 60 * life).toFloat(), 80F, healthPaint
+        )
+        canvas.drawText("$points", 20F, TEXT_SIZE, textPaint)
+        handler.postDelayed(runnable, UPDATE_MILLIS.toLong())
+    }
+
+
+    /**
+     * Movement on screen
+     * Touch activity
+     *
+     * */
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val touchX = event.x
+        val touchY = event.y
+
+        if (touchY >= basketY) {
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    oldX = event.x
+                    oldBasketX = basketX
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val shift = oldX - touchX
+                    val newBasketX = oldBasketX - shift
+                    basketX = if (newBasketX <= 0) {
+                        basketX
+                    } else (if (newBasketX >= dWidth - basket.width) {
+                        dWidth - basket.width
+                    } else {
+                        newBasketX
+                    }) as Float
+                }
+            }
+        }
+        return true
+    }
+
+
+
+
+
+}
+
+
