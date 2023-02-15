@@ -86,8 +86,8 @@ class GameView(context: Context) : View(context) {
         for (i in bombs.indices) {
             canvas.drawBitmap(
                 bombs[i].getBomb(bombs[i].bombFrame),
-                bombs[i].bombX,
-                bombs[i].bombY,
+                bombs[i].bombX as Float,
+                bombs[i].bombY as Float,
                 null
             )
             bombs[i].bombFrame++
@@ -132,7 +132,7 @@ class GameView(context: Context) : View(context) {
         for (i in explosions.indices) {
             canvas.drawBitmap(
                 explosions[i].getExplosion(explosions[i].explosionFrame),
-                explosions[i].explosionX, explosions[i].explosionY, null
+                explosions[i].explosionX as Float, explosions[i].explosionY as Float, null
             )
             explosions[i].explosionFrame++
             if (explosions[i].explosionFrame > 3) {
