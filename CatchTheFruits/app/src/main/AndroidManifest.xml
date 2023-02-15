@@ -9,8 +9,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CatchTheFruits"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
+        <!--android:theme="@style/Theme.CatchTheFruits"-->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -21,9 +22,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GameActivity"
+            android:name=".GameView"
             android:exported="true">
-
+        </activity>
+        <activity
+            android:name=".GameOver"
+            android:exported="true">
         </activity>
     </application>
 
