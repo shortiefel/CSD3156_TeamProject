@@ -10,19 +10,19 @@ import android.view.View
 import kotlin.random.Random
 
 
-class GameView(context: Context) : View(context) {
+class GameView (context: Context) : View(context) {
 
 
     /**
      * Declarations
      * **/
-    private val background: Bitmap = TODO()
-    private val ground: Bitmap
-    private val basket: Bitmap
-    private val rectBackground: Rect
-    private val rectGround: Rect
+    private var background: Bitmap
+    private var ground: Bitmap
+    private var basket: Bitmap
+    private var rectBackground: Rect
+    private var rectGround: Rect
     private val handler = Handler()
-    private val context: Context = TODO()
+    private var context: Context
     private val textPaint = Paint().apply {
         color = Color.rgb(255, 165, 0)
         textSize = TEXT_SIZE
@@ -51,6 +51,8 @@ class GameView(context: Context) : View(context) {
      *
      * */
     init {
+        this.context = context
+
         background = BitmapFactory.decodeResource(context.resources, R.drawable.game_bg)
         ground = BitmapFactory.decodeResource(context.resources, R.drawable.game_ground)
         basket = BitmapFactory.decodeResource(context.resources, R.drawable.fruit_basket)
@@ -86,8 +88,8 @@ class GameView(context: Context) : View(context) {
         for (i in bombs.indices) {
             canvas.drawBitmap(
                 bombs[i].getBomb(bombs[i].bombFrame),
-                bombs[i].bombX as Float,
-                bombs[i].bombY as Float,
+                bombs[i].bombX.toFloat(),
+                bombs[i].bombY.toFloat(),
                 null
             )
             bombs[i].bombFrame++
@@ -129,13 +131,13 @@ class GameView(context: Context) : View(context) {
         /**
          * When it explodes
          * */
-        for (i in explosions.indices) {
+        for (i in 0 until explosions.size) {
             canvas.drawBitmap(
                 explosions[i].getExplosion(explosions[i].explosionFrame),
-                explosions[i].explosionX as Float, explosions[i].explosionY as Float, null
+                explosions[i].explosionX.toFloat(), explosions[i].explosionY.toFloat(), null
             )
             explosions[i].explosionFrame++
-            if (explosions[i].explosionFrame > 3) {
+            if (explosions[i].explosionFrame > 2) {
                 explosions.removeAt(i)
             }
         }
