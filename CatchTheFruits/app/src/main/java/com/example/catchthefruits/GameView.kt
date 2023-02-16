@@ -131,7 +131,7 @@ class GameView (context: Context) : View(context) {
         /**
          * When it explodes
          * */
-        for (i in 0 until explosions.size) {
+        for (i in explosions.indices) {
             canvas.drawBitmap(
                 explosions[i].getExplosion(explosions[i].explosionFrame),
                 explosions[i].explosionX.toFloat(), explosions[i].explosionY.toFloat(), null
@@ -179,7 +179,7 @@ class GameView (context: Context) : View(context) {
                         dWidth - basket.width
                     } else {
                         newBasketX
-                    }) as Float
+                    }).toFloat()
                 }
             }
         }
