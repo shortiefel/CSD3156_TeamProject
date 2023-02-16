@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.os.Handler
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import kotlin.random.Random
@@ -136,10 +137,18 @@ class GameView (context: Context) : View(context) {
                 explosions[i].getExplosion(explosions[i].explosionFrame),
                 explosions[i].explosionX.toFloat(), explosions[i].explosionY.toFloat(), null
             )
-            explosions[i].explosionFrame++
-            if (explosions[i].explosionFrame > 2) {
-                explosions.removeAt(i)
+            if (explosions[i].explosionFrame < 3) {
+                explosions[i].explosionFrame++
             }
+        }
+        var removeAllExploded: Boolean = true
+        for (i in explosions.indices) {
+            if (explosions[i].explosionFrame != 3) {
+                removeAllExploded = false;
+            }
+        }
+        if(removeAllExploded){
+            explosions.clear();
         }
 
         when (life) {

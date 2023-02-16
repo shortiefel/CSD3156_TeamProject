@@ -27,7 +27,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@android:color/holo_blue_dark"
-            android:text="RESTART"
+            android:text="MAIN MENU"
             android:onClick="restart"/>
 
     </LinearLayout>

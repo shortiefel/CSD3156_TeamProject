@@ -7,7 +7,8 @@ class Explosion(context: Context) {
     private val explosion = arrayOf(
         BitmapFactory.decodeResource(context.resources, R.drawable.explode_0),
         BitmapFactory.decodeResource(context.resources, R.drawable.explode_1),
-        BitmapFactory.decodeResource(context.resources, R.drawable.explode_2)
+        BitmapFactory.decodeResource(context.resources, R.drawable.explode_2),
+        BitmapFactory.decodeResource(context.resources, R.drawable.explode_3)   //yes it is an invisible image =)
     )
     var explosionFrame = 0
     var explosionX: Int = 0
