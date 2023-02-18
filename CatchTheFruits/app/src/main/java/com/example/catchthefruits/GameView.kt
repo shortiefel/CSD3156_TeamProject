@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
+import android.media.MediaPlayer
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
@@ -40,6 +41,7 @@ class GameView (context: Context) : View(context) {
     private var points = 0
     private var life = 3
     private val runnable = Runnable { invalidate() }
+    private val explosionPlayers = mutableListOf<MediaPlayer>()
 
     companion object {
         private const val UPDATE_MILLIS = 30
@@ -98,6 +100,7 @@ class GameView (context: Context) : View(context) {
                 bombs[i].bombFrame = 0
             }
             bombs[i].bombY += bombs[i].bombVelocity
+            //if bombs touch ground
             if (bombs[i].bombY + bombs[i].getBombHeight() >= dHeight - ground.height) {
                 points += 10
                 val explosion = Explosion(context)
@@ -105,6 +108,7 @@ class GameView (context: Context) : View(context) {
                 explosion.explosionY = bombs[i].bombY
                 explosions.add(explosion)
                 bombs[i].resetPosition()
+                Play()
             }
         }
 
@@ -114,7 +118,7 @@ class GameView (context: Context) : View(context) {
          * */
         for (i in bombs.indices) {
             if (bombs[i].bombX + bombs[i].getBombWidth() >= basketX
-                && bombs[i].bombY <= basketX + basket.width
+                && bombs[i].bombY <= basketX + basket.width //btw this line shud be checking bombX, keeping it as bomby on myside so i can test audio -YT
                 && bombs[i].bombY + bombs[i].getBombHeight() >= basketY
                 && bombs[i].bombY + bombs[i].getBombHeight() <= basketY + basket.height
             ) {
@@ -147,6 +151,7 @@ class GameView (context: Context) : View(context) {
                 removeAllExploded = false;
             }
         }
+
         if(removeAllExploded){
             explosions.clear();
         }
@@ -195,7 +200,33 @@ class GameView (context: Context) : View(context) {
         return true
     }
 
+    private fun Play()
+    {
+        var mediaPlayer: MediaPlayer? = null
+        if (mediaPlayer == null) {
 
+            mediaPlayer = MediaPlayer.create(context, R.raw.explosion)
+            mediaPlayer?.setOnCompletionListener {
+                StopPlaying()
+            }
+            mediaPlayer?.start()
+            explosionPlayers.add(mediaPlayer)
+        }
+
+    }
+
+    private fun StopPlaying()
+    {
+        val iterator = explosionPlayers.iterator()
+        while (iterator.hasNext()) {
+            val mediaPlayer = iterator.next()
+            if (!mediaPlayer.isPlaying) {
+                iterator.remove()
+                mediaPlayer.release()
+            }
+        }
+
+    }
 
 
 
