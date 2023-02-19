@@ -37,6 +37,7 @@ class GameView (context: Context) : View(context) {
     private var oldX = 0f
     private var oldBasketX = 0f
     private val bombs = mutableListOf<Bomb>()
+    private val fruits = mutableListOf<Fruits>()
     private val explosions = mutableListOf<Explosion>()
     private var points = 0
     private var life = 3
@@ -74,6 +75,10 @@ class GameView (context: Context) : View(context) {
         for (i in 0 until 3) {
             bombs.add(Bomb(context))
         }
+
+        for (i in 0 until 8) {
+            fruits.add(Fruits(context))
+        }
     }
 
     /**
@@ -102,7 +107,7 @@ class GameView (context: Context) : View(context) {
             bombs[i].bombY += bombs[i].bombVelocity
             //if bombs touch ground
             if (bombs[i].bombY + bombs[i].getBombHeight() >= dHeight - ground.height) {
-                points += 10
+                //points += 10
                 val explosion = Explosion(context)
                 explosion.explosionX = bombs[i].bombX
                 explosion.explosionY = bombs[i].bombY
@@ -112,13 +117,45 @@ class GameView (context: Context) : View(context) {
             }
         }
 
+        /**
+         * Dropping Fruits
+         * */
+        for (i in fruits.indices) {
+            canvas.drawBitmap(
+                fruits[i].getfruit(i),
+                fruits[i].fruitX.toFloat(),
+                fruits[i].fruitY.toFloat(),
+                null
+            )
+
+            fruits[i].fruitY += fruits[i].fruitVelocity
+            //if fruit touches ground, reset pos
+            if (fruits[i].fruitY + fruits[i].getfruitHeight() >= dHeight - ground.height) {
+                fruits[i].resetPosition()
+            }
+        }
+
+        //if fruit hits basket, add points
+        //also, im putting this on top of the bomb collision, so it will still add points during the
+        //last life, before switching intent
+        for (i in fruits.indices) {
+            if (fruits[i].fruitX + fruits[i].getfruitWidth() >= basketX
+                && fruits[i].fruitX <= basketX + basket.width
+                && fruits[i].fruitY + fruits[i].getfruitHeight() >= basketY
+                && fruits[i].fruitY + fruits[i].getfruitHeight() <= basketY + basket.height
+            ) {
+                points += 10;
+                fruits[i].resetPosition()
+            }
+        }
+
 
         /**
          * Bombing
          * */
         for (i in bombs.indices) {
             if (bombs[i].bombX + bombs[i].getBombWidth() >= basketX
-                && bombs[i].bombY <= basketX + basket.width //btw this line shud be checking bombX, keeping it as bomby on myside so i can test audio -YT
+                && bombs[i].bombX <= basketX + basket.width //btw this line shud be checking bombX, keeping it as bomby on myside so i can test audio -YT
                 && bombs[i].bombY + bombs[i].getBombHeight() >= basketY
                 && bombs[i].bombY + bombs[i].getBombHeight() <= basketY + basket.height
             ) {
