@@ -22,17 +22,17 @@ class Fruits(context: Context) {
     private val random = Random
 
     init {
-        resetPosition()
+        resetPosition(0)
     }
 
     fun getfruit(frame: Int) = fruit[frame]
 
-    fun getfruitWidth() = fruit[0].width
+    fun getfruitWidth(frame: Int) = fruit[frame].width
 
-    fun getfruitHeight() = fruit[0].height
+    fun getfruitHeight(frame: Int) = fruit[frame].height
 
-    fun resetPosition() {
-        fruitX = random.nextInt(GameView.dWidth - getfruitWidth())
+    fun resetPosition(frame: Int) {
+        fruitX = random.nextInt(GameView.dWidth - getfruitWidth(frame))
         fruitY = -200 + random.nextInt(600) * -1
         fruitVelocity = 35 + random.nextInt(16)
     }

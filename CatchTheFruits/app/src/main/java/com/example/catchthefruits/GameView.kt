@@ -90,8 +90,30 @@ class GameView (context: Context) : View(context) {
         canvas.drawBitmap(ground, null, rectGround, null)
         canvas.drawBitmap(basket, basketX, basketY, null)
 
+
+
+        /**
+         * Dropping Fruits
+         * */
+        for (i in fruits.indices) {
+            canvas.drawBitmap(
+                fruits[i].getfruit(i),
+                fruits[i].fruitX.toFloat(),
+                fruits[i].fruitY.toFloat(),
+                null
+            )
+
+            fruits[i].fruitY += fruits[i].fruitVelocity
+            //if fruit touches ground, reset pos
+            if (fruits[i].fruitY + fruits[i].getfruitHeight(i) >= dHeight - ground.height) {
+                fruits[i].resetPosition(i)
+            }
+        }
+
+
         /**
          * Bombing animation and such
+         * - Rendering this last so that player can see - YQ
          * */
         for (i in bombs.indices) {
             canvas.drawBitmap(
@@ -117,35 +139,18 @@ class GameView (context: Context) : View(context) {
             }
         }
 
-        /**
-         * Dropping Fruits
-         * */
-        for (i in fruits.indices) {
-            canvas.drawBitmap(
-                fruits[i].getfruit(i),
-                fruits[i].fruitX.toFloat(),
-                fruits[i].fruitY.toFloat(),
-                null
-            )
-
-            fruits[i].fruitY += fruits[i].fruitVelocity
-            //if fruit touches ground, reset pos
-            if (fruits[i].fruitY + fruits[i].getfruitHeight() >= dHeight - ground.height) {
-                fruits[i].resetPosition()
-            }
-        }
 
         //if fruit hits basket, add points
         //also, im putting this on top of the bomb collision, so it will still add points during the
         //last life, before switching intent
         for (i in fruits.indices) {
-            if (fruits[i].fruitX + fruits[i].getfruitWidth() >= basketX
+            if (fruits[i].fruitX + fruits[i].getfruitWidth(i) >= basketX
                 && fruits[i].fruitX <= basketX + basket.width
-                && fruits[i].fruitY + fruits[i].getfruitHeight() >= basketY
-                && fruits[i].fruitY + fruits[i].getfruitHeight() <= basketY + basket.height
+                && fruits[i].fruitY + fruits[i].getfruitHeight(i) >= basketY
+                && fruits[i].fruitY + fruits[i].getfruitHeight(i) <= basketY + basket.height
             ) {
                 points += 10;
-                fruits[i].resetPosition()
+                fruits[i].resetPosition(i)
             }
         }
 
