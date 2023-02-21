@@ -2,6 +2,7 @@ package com.example.catchthefruits
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.media.MediaPlayer
 import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
@@ -22,7 +23,7 @@ class GameOver : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameover);
-
+        PlaySound(R.raw.lose)
         points = findViewById<TextView>(R.id.points);
         highpoints = findViewById<TextView>(R.id.highpoints);
         newhighpointsIV = findViewById<ImageView>(R.id.imgViewNewHigh);
@@ -44,12 +45,28 @@ class GameOver : AppCompatActivity() {
     }
 
     fun restart(view: View){
+        PlaySound(R.raw.buttonclick)
         val i: Intent = Intent(this, MainActivity::class.java);
         startActivity(i);
         finish();
     }
 
     fun exit(view: View){
+        PlaySound(R.raw.buttonclick)
         finish();
+    }
+
+    fun PlaySound(resourceID : Int){
+        var mediaPlayer: MediaPlayer? = null
+        if (mediaPlayer == null) {
+
+            mediaPlayer = MediaPlayer.create(this, resourceID)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.stop()
+                mediaPlayer?.reset()
+                mediaPlayer?.release()
+            }
+            mediaPlayer?.start()
+        }
     }
 }

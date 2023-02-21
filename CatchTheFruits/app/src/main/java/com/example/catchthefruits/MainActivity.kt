@@ -1,5 +1,6 @@
 package com.example.catchthefruits
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -19,6 +20,17 @@ class MainActivity : AppCompatActivity() {
 
         val playButton : Button = findViewById(R.id.playbtn)
         playButton.setOnClickListener {
+            var mediaPlayer: MediaPlayer? = null
+            if (mediaPlayer == null) {
+
+                mediaPlayer = MediaPlayer.create(this, R.raw.buttonclick)
+                mediaPlayer?.setOnCompletionListener {
+                    mediaPlayer?.stop()
+                    mediaPlayer?.reset()
+                    mediaPlayer?.release()
+                }
+                mediaPlayer?.start()
+            }
             startGame(GameView(this))
         }
     }

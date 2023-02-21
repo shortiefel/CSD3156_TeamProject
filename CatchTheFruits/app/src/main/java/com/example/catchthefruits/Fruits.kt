@@ -19,6 +19,7 @@ class Fruits(context: Context) {
     var fruitX: Int = 0
     var fruitY: Int = 0
     var fruitVelocity: Int = 0
+    var playedDroppingSound: Boolean = false
     private val random = Random
 
     init {
@@ -35,5 +36,6 @@ class Fruits(context: Context) {
         fruitX = random.nextInt(GameView.dWidth - getfruitWidth(frame))
         fruitY = -200 + random.nextInt(600) * -1
         fruitVelocity = 35 + random.nextInt(16)
+        playedDroppingSound = false
     }
 }

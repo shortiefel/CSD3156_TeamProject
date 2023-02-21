@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.*
 import android.media.MediaPlayer
 import android.os.Handler
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import kotlin.random.Random
@@ -43,6 +42,8 @@ class GameView (context: Context) : View(context) {
     private var life = 3
     private val runnable = Runnable { invalidate() }
     private val explosionPlayers = mutableListOf<MediaPlayer>()
+    private val dropPlayers = mutableListOf<MediaPlayer>()
+    private var canPlaySound = true
 
     companion object {
         private const val UPDATE_MILLIS = 30
@@ -108,6 +109,12 @@ class GameView (context: Context) : View(context) {
             if (fruits[i].fruitY + fruits[i].getfruitHeight(i) >= dHeight - ground.height) {
                 fruits[i].resetPosition(i)
             }
+
+            if (!fruits[i].playedDroppingSound && fruits[i].fruitY > -200 && canPlaySound)
+            {
+                fruits[i].playedDroppingSound = true
+                playSound(dropPlayers, R.raw.drop)
+            }
         }
 
 
@@ -135,7 +142,7 @@ class GameView (context: Context) : View(context) {
                 explosion.explosionY = bombs[i].bombY
                 explosions.add(explosion)
                 bombs[i].resetPosition()
-                Play()
+                playSound(explosionPlayers, R.raw.explosion)
             }
         }
 
@@ -160,13 +167,14 @@ class GameView (context: Context) : View(context) {
          * */
         for (i in bombs.indices) {
             if (bombs[i].bombX + bombs[i].getBombWidth() >= basketX
-                && bombs[i].bombX <= basketX + basket.width //btw this line shud be checking bombX, keeping it as bomby on myside so i can test audio -YT
+                && bombs[i].bombX <= basketX + basket.width
                 && bombs[i].bombY + bombs[i].getBombHeight() >= basketY
                 && bombs[i].bombY + bombs[i].getBombHeight() <= basketY + basket.height
             ) {
                 life--
                 bombs[i].resetPosition()
                 if (life == 0) {
+                    stopPlayingAll()
                     val intent = Intent(context, GameOver::class.java)
                     intent.putExtra("points", points)
                     context.startActivity(intent)
@@ -242,32 +250,56 @@ class GameView (context: Context) : View(context) {
         return true
     }
 
-    private fun Play()
+    private fun playSound(mediaPlayers : MutableList<MediaPlayer>, resourceID: Int)
     {
+        if (!canPlaySound)
+            return
         var mediaPlayer: MediaPlayer? = null
         if (mediaPlayer == null) {
 
-            mediaPlayer = MediaPlayer.create(context, R.raw.explosion)
+            mediaPlayer = MediaPlayer.create(context, resourceID)
             mediaPlayer?.setOnCompletionListener {
-                StopPlaying()
+                stopPlaying(mediaPlayers)
             }
             mediaPlayer?.start()
-            explosionPlayers.add(mediaPlayer)
+            mediaPlayers.add(mediaPlayer)
         }
 
     }
 
-    private fun StopPlaying()
+    private fun stopPlaying(mediaPlayers: MutableList<MediaPlayer>)
     {
-        val iterator = explosionPlayers.iterator()
+        val iterator = mediaPlayers.iterator()
         while (iterator.hasNext()) {
-            val mediaPlayer = iterator.next()
+            var mediaPlayer = iterator.next()
             if (!mediaPlayer.isPlaying) {
                 iterator.remove()
+                mediaPlayer.reset()
                 mediaPlayer.release()
             }
         }
 
+    }
+
+    private fun stopPlayingAll()
+    {
+        val iteratorExplosion = explosionPlayers.iterator()
+        while (iteratorExplosion.hasNext()) {
+            var mediaPlayer = iteratorExplosion.next()
+            iteratorExplosion.remove()
+            mediaPlayer.stop()
+            mediaPlayer.reset()
+            mediaPlayer.release()
+        }
+        val iteratorDrop = dropPlayers.iterator()
+        while (iteratorDrop.hasNext()) {
+            var mediaPlayer = iteratorDrop.next()
+            iteratorDrop.remove()
+            mediaPlayer.stop()
+            mediaPlayer.reset()
+            mediaPlayer.release()
+        }
+        canPlaySound = false
     }
 
 
