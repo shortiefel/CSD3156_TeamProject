@@ -1,3 +1,23 @@
+/***
+ * Names:        Lee Yu Ting
+ *               Lim Yi Qin
+ *               Loh Yun Xuan
+ *               Tan Wei Ling Felicia
+ *               Woon Ting Ting
+ * Student IDs:  2002892
+ *               2000804
+ *               2001533
+ *               2001339
+ *               2002323
+ * Brief:       This file contains the code needed for creation of gameover
+ *
+ * Copyright (C) 2023 DigiPen Institute of Technology.
+ * Reproduction or disclosure of this file or its contents
+ * without the prior written consent of DigiPen Institute of
+ * Technology is prohibited.
+ */
+
+
 package com.example.catchthefruits
 
 import android.content.Intent
@@ -16,10 +36,15 @@ import androidx.appcompat.app.AppCompatActivity
  * When player dies
  * */
 class GameOver : AppCompatActivity() {
+
+    /**
+     * Declarations
+     * **/
     lateinit var points: TextView;
     lateinit var highpoints: TextView;
     lateinit var newhighpointsIV: ImageView;
     lateinit var sharedPref: SharedPreferences;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameover);
@@ -44,6 +69,9 @@ class GameOver : AppCompatActivity() {
         }
     }
 
+    /**
+     * Restarting game
+     * */
     fun restart(view: View){
         PlaySound(R.raw.buttonclick)
         val i: Intent = Intent(this, MainActivity::class.java);
@@ -51,11 +79,17 @@ class GameOver : AppCompatActivity() {
         finish();
     }
 
+    /**
+     * Exiting game
+     * */
     fun exit(view: View){
         PlaySound(R.raw.buttonclick)
         finish();
     }
 
+    /**
+     * Playing of audio
+     * */
     fun PlaySound(resourceID : Int){
         var mediaPlayer: MediaPlayer? = null
         if (mediaPlayer == null) {
