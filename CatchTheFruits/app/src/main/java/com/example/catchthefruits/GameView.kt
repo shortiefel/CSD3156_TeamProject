@@ -35,17 +35,27 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.core.content.ContextCompat.getSystemService
 
 
-class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
-
+class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback, SensorEventListener {
+    private lateinit var sensorMgr: SensorManager
     private var gameThread: GameThread? = null
+   //private val sensorManager = sensorMgr
+    private val mValuesMagnet = FloatArray(3)
+    private val mValuesAccel = FloatArray(3)
+    private val mValuesOrientation = FloatArray(3)
+
+    private val mRotationMatrix = FloatArray(9)
 
     init{
         val holder =  getHolder()
         holder.addCallback(this)
         isFocusable = true
         gameThread = GameThread(holder, this)
+        AppConstants.sensorManager
+        AppConstants.sensorManager.registerListener(this, AppConstants.acceleSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        AppConstants.sensorManager.registerListener(this, AppConstants.magfieldSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun surfaceCreated(holder : SurfaceHolder){
@@ -72,10 +82,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
                 }catch (e : InterruptedException){}
             }
         }
-
-        //sensorManager.registerListener(this, asensor, SensorManager.SENSOR_DELAY_NORMAL)
-        //sensorManager.registerListener(this, msensor, SensorManager.SENSOR_DELAY_NORMAL)
-
+        AppConstants.sensorManager.unregisterListener(this)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -102,6 +109,31 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
             }
         }
         return true
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.getType() == Sensor.TYPE_ACCELEROMETER) {
+            System.arraycopy(event.values, 0, mValuesAccel, 0, 3);
+        }
+        else if (event?.sensor?.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            System.arraycopy(event.values, 0, mValuesMagnet, 0, 3);
+        }
+
+        SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
+        SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
+
+        val ss = mValuesOrientation[2].toInt() * 100
+        AppConstants.gameEngine.basketImage.BasketImageX += ss
+        if(AppConstants.gameEngine.basketImage.BasketImageX < 0){
+            AppConstants.gameEngine.basketImage.BasketImageX = 0
+        }
+        if(AppConstants.gameEngine.basketImage.BasketImageX > (AppConstants.SCREEN_WIDTH - AppConstants.bitmapBank.getBasketWidth()!!)){
+            AppConstants.gameEngine.basketImage.BasketImageX = (AppConstants.SCREEN_WIDTH - AppConstants.bitmapBank.getBasketWidth()!!)
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        return //nothing need to do here
     }
 }
 
