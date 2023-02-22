@@ -79,7 +79,8 @@ class MainActivity : AppCompatActivity() {
                 bgmPlayer?.reset()
                 bgmPlayer?.release()
             }
-            bgmPlayer?.start()
+            //temp crash fix...is this supposed to be here? -YQ
+            //bgmPlayer?.start()
             startGame(toggleSwitch.isChecked)
         }
 
