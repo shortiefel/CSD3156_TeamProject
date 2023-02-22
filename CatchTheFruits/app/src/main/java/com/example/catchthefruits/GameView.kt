@@ -4,6 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.os.Handler
 import android.util.Log
@@ -12,7 +16,7 @@ import android.view.View
 import kotlin.random.Random
 
 
-class GameView (context: Context) : View(context) {
+class GameView(context: Context, msensor: Sensor?, asensor: Sensor?, sensorMgr: SensorManager) : View(context), SensorEventListener {
 
 
     /**
@@ -43,6 +47,13 @@ class GameView (context: Context) : View(context) {
     private var life = 3
     private val runnable = Runnable { invalidate() }
     private val explosionPlayers = mutableListOf<MediaPlayer>()
+
+    private val sensorManager = sensorMgr
+    private val mValuesMagnet = FloatArray(3)
+    private val mValuesAccel = FloatArray(3)
+    private val mValuesOrientation = FloatArray(3)
+
+    private val mRotationMatrix = FloatArray(9)
 
     companion object {
         private const val UPDATE_MILLIS = 30
@@ -79,6 +90,10 @@ class GameView (context: Context) : View(context) {
         for (i in 0 until 8) {
             fruits.add(Fruits(context))
         }
+
+        sensorManager.registerListener(this, asensor, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, msensor, SensorManager.SENSOR_DELAY_NORMAL)
+
     }
 
     /**
@@ -167,6 +182,7 @@ class GameView (context: Context) : View(context) {
                 life--
                 bombs[i].resetPosition()
                 if (life == 0) {
+                    sensorManager.unregisterListener(this)
                     val intent = Intent(context, GameOver::class.java)
                     intent.putExtra("points", points)
                     context.startActivity(intent)
@@ -210,6 +226,36 @@ class GameView (context: Context) : View(context) {
         handler.postDelayed(runnable, UPDATE_MILLIS.toLong())
     }
 
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.getType() == Sensor.TYPE_ACCELEROMETER) {
+            System.arraycopy(event.values, 0, mValuesAccel, 0, 3);
+        }
+        else if (event?.sensor?.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            System.arraycopy(event.values, 0, mValuesMagnet, 0, 3);
+        }
+
+        SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
+        SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
+
+        //Log.e("lalalalala", "orientation is ${mValuesOrientation[0]}, ${mValuesOrientation[1]}, ${mValuesOrientation[2]}")
+        //Log.e("lalalalala", "basket is ${basketX}")
+
+
+        val ss = mValuesOrientation[2] * 100F
+        basketX += ss
+        if(basketX < 0F){
+            basketX = 0F
+        }
+        if(basketX > (dWidth - basket.width)){
+            basketX = (dWidth - basket.width).toFloat()
+        }
+
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        Log.e("lalala", "Accuracy Changed")
+    }
 
     /**
      * Movement on screen
