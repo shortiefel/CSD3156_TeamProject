@@ -28,7 +28,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 
 class MainActivity : AppCompatActivity() {
-
+    private var bgmPlayer: MediaPlayer? = null
+    private var mediaPlayer: MediaPlayer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         //force the client device to use light mode for this app
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -36,6 +37,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         AppConstants.initialization(this.applicationContext)
+
+        if (bgmPlayer == null)
+        {
+            bgmPlayer = MediaPlayer.create(this, R.raw.bgm)
+            bgmPlayer?.setOnCompletionListener {
+                if (!bgmPlayer!!.isPlaying)
+                {
+                    bgmPlayer?.start()
+                }
+            }
+            bgmPlayer?.start()
+        }
     }
 
     /**
@@ -45,7 +58,6 @@ class MainActivity : AppCompatActivity() {
         /**
          * Playing of audio
          * */
-        var mediaPlayer: MediaPlayer? = null
         if (mediaPlayer == null) {
 
             mediaPlayer = MediaPlayer.create(this, R.raw.buttonclick)
