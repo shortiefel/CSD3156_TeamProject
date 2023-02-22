@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatDelegate
 
 class MainActivity : AppCompatActivity() {
 
+    private var bgmPlayer: MediaPlayer? = null
+    private var playButtonPlayer: MediaPlayer?  = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         //force the client device to use light mode for this app
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -18,18 +21,37 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        //play bgm
+        if (bgmPlayer == null)
+        {
+            bgmPlayer = MediaPlayer.create(this, R.raw.bgm)
+            bgmPlayer?.setOnCompletionListener {
+                if (!bgmPlayer!!.isPlaying)
+                {
+                    bgmPlayer?.start()
+                }
+            }
+            bgmPlayer?.start()
+        }
+
+
         val playButton : Button = findViewById(R.id.playbtn)
         playButton.setOnClickListener {
-            var mediaPlayer: MediaPlayer? = null
-            if (mediaPlayer == null) {
+            if (playButtonPlayer == null) {
 
-                mediaPlayer = MediaPlayer.create(this, R.raw.buttonclick)
-                mediaPlayer?.setOnCompletionListener {
-                    mediaPlayer?.stop()
-                    mediaPlayer?.reset()
-                    mediaPlayer?.release()
+                playButtonPlayer = MediaPlayer.create(this, R.raw.buttonclick)
+                playButtonPlayer?.setOnCompletionListener {
+                    playButtonPlayer?.stop()
+                    playButtonPlayer?.reset()
+                    playButtonPlayer?.release()
                 }
-                mediaPlayer?.start()
+                playButtonPlayer?.start()
+            }
+            if (bgmPlayer != null)
+            {
+                bgmPlayer?.stop()
+                bgmPlayer?.reset()
+                bgmPlayer?.release()
             }
             startGame(GameView(this))
         }
