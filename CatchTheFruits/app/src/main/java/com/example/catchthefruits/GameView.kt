@@ -37,7 +37,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 
 
-class GameView(context: Context, msensor: Sensor?, asensor: Sensor?, sensorMgr: SensorManager) : View(context), SensorEventListener {
+class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private var gameThread: GameThread? = null
 
@@ -73,8 +73,8 @@ class GameView(context: Context, msensor: Sensor?, asensor: Sensor?, sensorMgr: 
             }
         }
 
-        sensorManager.registerListener(this, asensor, SensorManager.SENSOR_DELAY_NORMAL)
-        sensorManager.registerListener(this, msensor, SensorManager.SENSOR_DELAY_NORMAL)
+        //sensorManager.registerListener(this, asensor, SensorManager.SENSOR_DELAY_NORMAL)
+        //sensorManager.registerListener(this, msensor, SensorManager.SENSOR_DELAY_NORMAL)
 
     }
 
