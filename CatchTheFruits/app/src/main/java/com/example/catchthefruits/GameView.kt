@@ -23,13 +23,21 @@
 package com.example.catchthefruits
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.*
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.media.MediaPlayer
+import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 
 
-class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, msensor: Sensor?, asensor: Sensor?, sensorMgr: SensorManager) : View(context), SensorEventListener {
 
     private var gameThread: GameThread? = null
 
@@ -64,6 +72,10 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
                 }catch (e : InterruptedException){}
             }
         }
+
+        sensorManager.registerListener(this, asensor, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, msensor, SensorManager.SENSOR_DELAY_NORMAL)
+
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
