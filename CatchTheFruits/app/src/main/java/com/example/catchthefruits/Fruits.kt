@@ -20,59 +20,23 @@
 
 package com.example.catchthefruits
 
-import android.content.Context
-import android.graphics.BitmapFactory
 import kotlin.random.Random
 
-class Fruits(context: Context) {
-
-    /**
-     * Creation of a bitmap for fruits
-     * */
-    private val fruit = arrayOf(
-        BitmapFactory.decodeResource(context.resources, R.drawable.fruit_1),
-        BitmapFactory.decodeResource(context.resources, R.drawable.fruit_2),
-        BitmapFactory.decodeResource(context.resources, R.drawable.fruit_3),
-        BitmapFactory.decodeResource(context.resources, R.drawable.fruit_4),
-        BitmapFactory.decodeResource(context.resources, R.drawable.fruit_5),
-        BitmapFactory.decodeResource(context.resources, R.drawable.fruit_6),
-        BitmapFactory.decodeResource(context.resources, R.drawable.fruit_7),
-        BitmapFactory.decodeResource(context.resources, R.drawable.fruit_8)
-    )
-
-    /**
-     * Declarations
-     * **/
+class Fruits {
     var fruitFrame = 0
     var fruitX: Int = 0
     var fruitY: Int = 0
     var fruitVelocity: Int = 0
     var playedDroppingSound: Boolean = false
-    private val random = Random
 
     init {
+        playedDroppingSound = false
         resetPosition(0)
     }
 
-    fun getfruit(frame: Int) = fruit[frame]
-
-    /**
-     * Getting width of image fruits
-     * */
-    fun getfruitWidth(frame: Int) = fruit[frame].width
-
-    /**
-     * Getting height of image fruits
-     * */
-    fun getfruitHeight(frame: Int) = fruit[frame].height
-
-    /**
-     * Resetting the explosion position
-     * */
     fun resetPosition(frame: Int) {
-        fruitX = random.nextInt(GameView.dWidth - getfruitWidth(frame))
-        fruitY = -200 + random.nextInt(600) * -1
-        fruitVelocity = 35 + random.nextInt(16)
-        playedDroppingSound = false
+        fruitX = Random.nextInt(AppConstants.SCREEN_WIDTH - AppConstants.bitmapBank.getFruitWidth(frame)!!)
+        fruitY = -200 + Random.nextInt(600) * -1
+        fruitVelocity = 35 + Random.nextInt(16)
     }
 }

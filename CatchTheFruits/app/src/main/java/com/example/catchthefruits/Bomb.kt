@@ -20,52 +20,22 @@
 
 package com.example.catchthefruits
 
-import android.content.Context
-import android.graphics.BitmapFactory
 import kotlin.random.Random
 
-class Bomb(context: Context) {
-
-    /**
-     * Creation of a bitmap for bombs
-     * */
-    private val bomb = arrayOf(
-        BitmapFactory.decodeResource(context.resources, R.drawable.bomb_0),
-        BitmapFactory.decodeResource(context.resources, R.drawable.bomb_1),
-        BitmapFactory.decodeResource(context.resources, R.drawable.bomb_2)
-    )
-
-    /**
-     * Declarations
-     * **/
-    var bombFrame = 0
+class Bomb() {
+    var currentFrame = 0
     var bombX: Int = 0
     var bombY: Int = 0
     var bombVelocity: Int = 0
-    private val random = Random
 
     init {
         resetPosition()
     }
 
-    fun getBomb(frame: Int) = bomb[frame]
-
-    /**
-     * Getting width of image bomb
-     * */
-    fun getBombWidth() = bomb[0].width
-
-    /**
-     * Getting height of image bomb
-     * */
-    fun getBombHeight() = bomb[0].height
-
-    /**
-     * Resetting the bomb position
-     * */
     fun resetPosition() {
-        bombX = random.nextInt(GameView.dWidth - getBombWidth())
-        bombY = -200 + random.nextInt(600) * -1
-        bombVelocity = 35 + random.nextInt(16)
+        bombX = Random.nextInt(AppConstants.SCREEN_WIDTH - AppConstants.bitmapBank.getBombWidth()!!)
+        bombY = -200 + Random.nextInt(600) * -1
+        bombVelocity = 35 + Random.nextInt(16)
+        currentFrame = 0
     }
 }
