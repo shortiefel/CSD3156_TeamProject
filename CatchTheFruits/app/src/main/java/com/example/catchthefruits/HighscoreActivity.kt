@@ -9,7 +9,8 @@
  *               2001533
  *               2001339
  *               2002323
- * Brief:       This file contains the code needed for creation of gameover
+ * Brief:        Extends the AppCompatActivity class and is responsible for
+ *               displaying the high score achieved in the game.
  *
  * Copyright (C) 2023 DigiPen Institute of Technology.
  * Reproduction or disclosure of this file or its contents
@@ -30,14 +31,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-/**
- * When player dies
- * */
+
 class HighscoreActivity : AppCompatActivity() {
     lateinit var points: TextView
     lateinit var highpoints: TextView
     lateinit var newhighpointsIV: ImageView
     lateinit var sharedPref: SharedPreferences
+
+    /**
+     * TextView for displaying the player's current score,
+     * another TextView for displaying the highest score achieved in previous games,
+     * and an ImageView that displays a "new high score" icon
+     * */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_highscore)

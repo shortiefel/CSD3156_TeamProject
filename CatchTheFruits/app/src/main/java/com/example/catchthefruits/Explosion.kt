@@ -9,7 +9,7 @@
  *               2001533
  *               2001339
  *               2002323
- * Brief:       This file contains the code needed for creation of explosion
+ * Brief:        Represent an explosion animation that occurs when a bomb is successfully caught by the basket.
  *
  * Copyright (C) 2023 DigiPen Institute of Technology.
  * Reproduction or disclosure of this file or its contents

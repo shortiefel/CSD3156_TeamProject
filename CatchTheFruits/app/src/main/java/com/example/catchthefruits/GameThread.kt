@@ -1,3 +1,24 @@
+/***
+ * Names:        Lee Yu Ting
+ *               Lim Yi Qin
+ *               Loh Yun Xuan
+ *               Tan Wei Ling Felicia
+ *               Woon Ting Ting
+ * Student IDs:  2002892
+ *               2000804
+ *               2001533
+ *               2001339
+ *               2002323
+ * Brief:        Responsible for running the game loop, which updates and draws
+ *               the game elements on the canvas at a fixed rate.
+ *
+ * Copyright (C) 2023 DigiPen Institute of Technology.
+ * Reproduction or disclosure of this file or its contents
+ * without the prior written consent of DigiPen Institute of
+ * Technology is prohibited.
+ */
+
+
 package com.example.catchthefruits
 
 import android.os.SystemClock
@@ -20,6 +41,9 @@ class GameThread(surfaceHolder: SurfaceHolder, gameView: GameView) : Thread() {
         isRunning = true
     }
 
+    /**
+     * Contains the main game loop, which executes while the thread is running.
+     * */
     override fun run(){
         while(isRunning){
             startTime = SystemClock.uptimeMillis()

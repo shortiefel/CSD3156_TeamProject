@@ -9,13 +9,15 @@
  *               2001533
  *               2001339
  *               2002323
- * Brief:       This file contains the code needed for creation of gameover
+ * Brief:        Displayed when the game is over and it shows the points achieved by the player
+ *               in the current game and the highest points achieved in previous games.
  *
  * Copyright (C) 2023 DigiPen Institute of Technology.
  * Reproduction or disclosure of this file or its contents
  * without the prior written consent of DigiPen Institute of
  * Technology is prohibited.
  */
+
 
 
 package com.example.catchthefruits
@@ -29,14 +31,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-/**
- * When player dies
- * */
+
 class GameOver : AppCompatActivity() {
     lateinit var points: TextView
     lateinit var highpoints: TextView
     lateinit var newhighpointsIV: ImageView
     lateinit var sharedPref: SharedPreferences
+
+    /**
+     * When the activity is created. It sets the layout for the activity and initializes some
+     * variables and views. It also plays a sound using the PlaySound() function when the game
+     * is lost.
+     * */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gameover)
@@ -62,6 +68,11 @@ class GameOver : AppCompatActivity() {
         }
     }
 
+    /**
+     * When the "Restart" button is clicked. It plays a sound using the PlaySound() function,
+     * creates an intent to start the MainActivity and starts the activity. The current activity
+     * is finished using the finish() function.
+     * */
     fun restart(view: View){
         PlaySound(R.raw.buttonclick)
         val intent = Intent(this, MainActivity::class.java)
@@ -69,11 +80,21 @@ class GameOver : AppCompatActivity() {
         finish()
     }
 
+    /**
+     *  When the "Exit" button is clicked. It plays a sound using the PlaySound() function and
+     *  finishes the current activity using the finish() function.
+     * */
     fun exit(view: View){
         PlaySound(R.raw.buttonclick)
         finish()
     }
 
+    /**
+     * Used to play sounds when buttons are clicked or the game is lost. It creates a MediaPlayer
+     * object, sets the audio resource using the create() function, sets a completion listener to
+     * release the MediaPlayer object when the audio is finished playing, and starts the audio
+     * using the start() function.
+     * */
     fun PlaySound(resourceID : Int){
         var mediaPlayer: MediaPlayer? = null
         if (mediaPlayer == null) {

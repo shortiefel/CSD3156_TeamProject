@@ -9,8 +9,7 @@
  *               2001533
  *               2001339
  *               2002323
- * Brief:       This file contains the code needed for creation of gameview and how
- *              the game runs
+ * Brief:        Extends SurfaceView and implements SurfaceHolder.Callback and SensorEventListener.
  *
  * Copyright (C) 2023 DigiPen Institute of Technology.
  * Reproduction or disclosure of this file or its contents
@@ -81,6 +80,10 @@ class GameView(context: Context, cheked: Boolean?) : SurfaceView(context), Surfa
         AppConstants.sensorEngine.sensorManager.unregisterListener(this)
     }
 
+    /**
+     * Responsible for handling touch events on the screen and updating
+     * the position of the BasketImage accordingly.
+     * */
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val touchX = event?.x
         val touchY = event?.y
@@ -107,6 +110,10 @@ class GameView(context: Context, cheked: Boolean?) : SurfaceView(context), Surfa
         return true
     }
 
+    /**
+     * Updates the position of the BasketImage based on the changes in the device's orientation as
+     * detected by the accelerometer and magnetometer sensors.
+     * */
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.getType() == Sensor.TYPE_ACCELEROMETER) {
             System.arraycopy(event.values, 0, mValuesAccel, 0, 3);

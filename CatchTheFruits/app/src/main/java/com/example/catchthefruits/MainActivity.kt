@@ -9,14 +9,13 @@
  *               2001533
  *               2001339
  *               2002323
- * Brief:       This file contains the code needed main activity 
+ * Brief:        Plays background music and a sound effect when the user clicks a button to start the game.
  *
  * Copyright (C) 2023 DigiPen Institute of Technology.
  * Reproduction or disclosure of this file or its contents
  * without the prior written consent of DigiPen Institute of
  * Technology is prohibited.
  */
-
 
 package com.example.catchthefruits
 
@@ -34,7 +33,10 @@ class MainActivity : AppCompatActivity() {
     private var bgmPlayer: MediaPlayer? = null
     private var playButtonPlayer: MediaPlayer?  = null
     private var mediaPlayer: MediaPlayer? = null
-    
+
+    /**
+     * Initializes AppConstants and starts playing the background music with a MediaPlayer object.
+     * */
     override fun onCreate(savedInstanceState: Bundle?) {
         //force the client device to use light mode for this app
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -43,9 +45,6 @@ class MainActivity : AppCompatActivity() {
         //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         AppConstants.initialization(this.applicationContext)
 
-        /**
-         * Playing of audio
-         * */
         if (bgmPlayer == null)
         {
             bgmPlayer = MediaPlayer.create(this, R.raw.bgm)
@@ -92,12 +91,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Loading of gameView
+     * Responsible for launching the GameActivity.
      * */
     fun startGame(checked: Boolean) {
-        /**
-         * Playing of audio
-         * */
+
         if (mediaPlayer == null) {
 
             mediaPlayer = MediaPlayer.create(this, R.raw.buttonclick)
