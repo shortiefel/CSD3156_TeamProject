@@ -23,7 +23,7 @@ package com.example.catchthefruits
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.view.View
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private var bgmPlayer: MediaPlayer? = null
     private var playButtonPlayer: MediaPlayer?  = null
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //force the client device to use light mode for this app
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        val playButton : Button = findViewById(R.id.playbtn)
+        val playButton : ImageButton = findViewById(R.id.playbtn)
         playButton.setOnClickListener {
             if (playButtonPlayer == null) {
 
@@ -75,13 +76,14 @@ class MainActivity : AppCompatActivity() {
                 bgmPlayer?.release()
             }
             bgmPlayer?.start()
+            startGame()
         }
     }
 
     /**
      * Loading of gameView
      * */
-    fun startGame(view: View) {
+    fun startGame(/*view: View*/) {
         /**
          * Playing of audio
          * */
