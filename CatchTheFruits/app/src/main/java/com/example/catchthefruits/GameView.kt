@@ -39,9 +39,7 @@ import androidx.core.content.ContextCompat.getSystemService
 
 
 class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback, SensorEventListener {
-    private lateinit var sensorMgr: SensorManager
     private var gameThread: GameThread? = null
-   //private val sensorManager = sensorMgr
     private val mValuesMagnet = FloatArray(3)
     private val mValuesAccel = FloatArray(3)
     private val mValuesOrientation = FloatArray(3)
@@ -53,9 +51,8 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback,
         holder.addCallback(this)
         isFocusable = true
         gameThread = GameThread(holder, this)
-        AppConstants.sensorManager
-        AppConstants.sensorManager.registerListener(this, AppConstants.acceleSensor, SensorManager.SENSOR_DELAY_NORMAL)
-        AppConstants.sensorManager.registerListener(this, AppConstants.magfieldSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        AppConstants.sensorEngine.sensorManager.registerListener(this, AppConstants.sensorEngine.acceleSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        AppConstants.sensorEngine.sensorManager.registerListener(this, AppConstants.sensorEngine.magfieldSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun surfaceCreated(holder : SurfaceHolder){
@@ -65,6 +62,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback,
             gameThread?.start()
         }
         else gameThread?.start()
+
     }
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
@@ -82,7 +80,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback,
                 }catch (e : InterruptedException){}
             }
         }
-        AppConstants.sensorManager.unregisterListener(this)
+        AppConstants.sensorEngine.sensorManager.unregisterListener(this)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

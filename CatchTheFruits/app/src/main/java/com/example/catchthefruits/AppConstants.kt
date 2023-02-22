@@ -2,17 +2,13 @@ package com.example.catchthefruits
 
 import android.content.Context
 import android.graphics.Point
-import android.hardware.Sensor
-import android.hardware.SensorManager
 import android.view.WindowManager
 
 class AppConstants {
     companion object{
         lateinit var bitmapBank: BitmapBank
         lateinit var gameEngine: GameEngine
-        lateinit var sensorManager: SensorManager
-        lateinit var magfieldSensor: Sensor
-        lateinit var acceleSensor: Sensor
+        lateinit var sensorEngine: SensorEngine
         var SCREEN_WIDTH = 10
         var SCREEN_HEIGHT = 1
 
@@ -20,6 +16,7 @@ class AppConstants {
             setScreenSize(context)
             bitmapBank = BitmapBank(context.resources)
             gameEngine = GameEngine(context)
+            sensorEngine = SensorEngine(context)
         }
 
         fun setScreenSize(context: Context){

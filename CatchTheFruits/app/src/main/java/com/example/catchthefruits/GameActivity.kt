@@ -11,9 +11,6 @@ class GameActivity : Activity() {
     lateinit var gameView : GameView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppConstants.sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        AppConstants.magfieldSensor = AppConstants.sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-        AppConstants.acceleSensor = AppConstants.sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         gameView = GameView(this)
         setContentView(gameView)
 
