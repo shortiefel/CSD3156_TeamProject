@@ -1,17 +1,14 @@
 package com.example.catchthefruits
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.hardware.Sensor
-import android.hardware.SensorManager
 import android.os.Bundle
 
 class GameActivity : Activity() {
     lateinit var gameView : GameView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        gameView = GameView(this)
+        gameView = GameView(this, intent.extras?.getBoolean("toggle"))
         setContentView(gameView)
 
         AppConstants.gameEngine.setOnGameOverListener {

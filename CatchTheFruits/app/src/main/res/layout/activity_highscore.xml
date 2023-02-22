@@ -12,34 +12,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
         android:gravity="center"
         android:orientation="vertical">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imgViewNewHigh"
-            android:background="@drawable/bomb_2"
-            android:visibility="gone"/>
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <TableRow
-                android:layout_width="match_parent"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Points: "
-                    android:textSize="24sp"
-                    android:layout_gravity="center|right"/>
-                <TextView
-                    android:id="@+id/points"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="000"
-                    android:textSize="50sp"
-                    android:textColor="@android:color/holo_green_dark"/>
-            </TableRow>
             <TableRow
                 android:layout_width="match_parent"
                 android:gravity="center">
@@ -71,22 +49,10 @@
             android:layout_width="240dp"
             android:layout_height="80dp"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="100dp"
             android:background="@drawable/restart_button_crop"
             android:text="MAIN MENU"
-            android:onClick="restart"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageButton
-            android:layout_width="240dp"
-            android:layout_height="80dp"
-            android:text="QUIT"
-            android:layout_marginStart="60dp"
-            android:background="@drawable/quit_crop"
-            android:onClick="exit"/>
+            android:id="@+id/backBtn"/>
     </LinearLayout>
 
 

@@ -23,22 +23,17 @@
 package com.example.catchthefruits
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.*
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.media.MediaPlayer
-import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import androidx.core.content.ContextCompat.getSystemService
 
 
-class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback, SensorEventListener {
+class GameView(context: Context, cheked: Boolean?) : SurfaceView(context), SurfaceHolder.Callback, SensorEventListener {
     private var gameThread: GameThread? = null
     private val mValuesMagnet = FloatArray(3)
     private val mValuesAccel = FloatArray(3)
@@ -51,8 +46,11 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback,
         holder.addCallback(this)
         isFocusable = true
         gameThread = GameThread(holder, this)
-        AppConstants.sensorEngine.sensorManager.registerListener(this, AppConstants.sensorEngine.acceleSensor, SensorManager.SENSOR_DELAY_NORMAL)
-        AppConstants.sensorEngine.sensorManager.registerListener(this, AppConstants.sensorEngine.magfieldSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        if(cheked == true){
+            AppConstants.sensorEngine.sensorManager.registerListener(this, AppConstants.sensorEngine.acceleSensor, SensorManager.SENSOR_DELAY_NORMAL)
+            AppConstants.sensorEngine.sensorManager.registerListener(this, AppConstants.sensorEngine.magfieldSensor, SensorManager.SENSOR_DELAY_NORMAL)
+
+        }
     }
 
     override fun surfaceCreated(holder : SurfaceHolder){

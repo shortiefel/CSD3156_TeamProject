@@ -25,6 +25,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -59,6 +60,8 @@ class MainActivity : AppCompatActivity() {
 
 
         val playButton : ImageButton = findViewById(R.id.playbtn)
+        val hsButton : ImageButton = findViewById(R.id.highscoreBtn)
+        val toggleSwitch : Switch = findViewById<Switch>(R.id.gyroToggle)
         playButton.setOnClickListener {
             if (playButtonPlayer == null) {
 
@@ -77,14 +80,20 @@ class MainActivity : AppCompatActivity() {
                 bgmPlayer?.release()
             }
             bgmPlayer?.start()
-            startGame()
+            startGame(toggleSwitch.isChecked)
+        }
+
+        hsButton.setOnClickListener{
+            val intent = Intent(this, HighscoreActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
     /**
      * Loading of gameView
      * */
-    fun startGame(/*view: View*/) {
+    fun startGame(checked: Boolean) {
         /**
          * Playing of audio
          * */
@@ -99,7 +108,15 @@ class MainActivity : AppCompatActivity() {
             mediaPlayer?.start()
         }
         val intent = Intent(this, GameActivity::class.java)
+        intent.putExtra("toggle", checked)
         startActivity(intent)
+        finish()
+    }
+
+    fun exit(view: View){
+        bgmPlayer?.stop()
+        bgmPlayer?.reset()
+        bgmPlayer?.release()
         finish()
     }
 
