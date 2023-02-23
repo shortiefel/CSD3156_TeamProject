@@ -9,7 +9,7 @@
  *               2001533
  *               2001339
  *               2002323
- * Brief:        Uses the device's magnetometer and accelerometer sensors.
+ * Brief:        Creates the device's magnetometer and accelerometer sensors for game use
  *
  * Copyright (C) 2023 DigiPen Institute of Technology.
  * Reproduction or disclosure of this file or its contents
@@ -30,6 +30,10 @@ class SensorEngine {
     var magfieldSensor: Sensor
     var acceleSensor: Sensor
 
+    /**
+    Constructs a SensorEngine class that creates the magnetic field and accelerometer sensor that will
+     be used in the game
+     **/
     constructor(context: Context){
         this.context = context
         sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager

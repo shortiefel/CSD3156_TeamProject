@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             startGame(toggleSwitch.isChecked)
         }
 
+        //go to the highscore activity
         hsButton.setOnClickListener{
             if (highScorePlayer == null) {
 
@@ -115,6 +116,9 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+    Stops the bgm and exits the app
+     **/
     fun exit(view: View){
         stopBgm()
         finish()

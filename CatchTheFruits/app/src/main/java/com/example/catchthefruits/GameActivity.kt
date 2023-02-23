@@ -26,6 +26,10 @@ import android.os.Bundle
 
 class GameActivity : Activity() {
     lateinit var gameView : GameView
+    /*
+    Creates the GameView class and sets the content view to GameView
+    Also sets a listener to show game over screen
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         gameView = GameView(this, intent.extras?.getBoolean("toggle"))
@@ -37,6 +41,9 @@ class GameActivity : Activity() {
         }
     }
 
+    /*
+    Switches and shows the Game Over Screen
+     */
     private fun showGameOverScreen() {
         val intent = Intent(this@GameActivity, GameOver::class.java)
         intent.putExtra("points", AppConstants.gameEngine.points)
