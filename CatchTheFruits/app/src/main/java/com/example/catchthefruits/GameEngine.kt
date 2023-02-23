@@ -64,7 +64,7 @@ class GameEngine {
         basketImage = BasketImage()
         groundImage = GroundImage()
 
-        health = HealthUI()
+        health = HealthUI(context)
 
         for (i in 0 until 3) {
             bombs.add(Bomb())

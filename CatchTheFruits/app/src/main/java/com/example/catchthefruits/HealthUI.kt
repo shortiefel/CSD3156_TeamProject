@@ -20,10 +20,12 @@
 
 package com.example.catchthefruits
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
+import androidx.core.content.res.ResourcesCompat
 
-class HealthUI {
+class HealthUI(context: Context) {
 
     /**
      * life:        an integer representing the current number of lives the player has.
@@ -44,6 +46,7 @@ class HealthUI {
             color = Color.rgb(255, 165, 0)
             textSize = TEXT_SIZE
             textAlign = Paint.Align.LEFT
+            typeface = ResourcesCompat.getFont(context, R.font.daydream)
         }
     }
 }
