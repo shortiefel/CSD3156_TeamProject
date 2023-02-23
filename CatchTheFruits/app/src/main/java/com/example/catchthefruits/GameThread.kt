@@ -56,8 +56,8 @@ class GameThread(surfaceHolder: SurfaceHolder, gameView: GameView) : Thread() {
                     AppConstants.gameEngine.updateAndDrawFruitImage(canvas)
                     AppConstants.gameEngine.updateAndDrawBombImage(canvas)
                     AppConstants.gameEngine.fruitCollision()
-                    AppConstants.gameEngine.bombCollision()
                     AppConstants.gameEngine.updateExplosions(canvas)
+                    AppConstants.gameEngine.bombCollision()
                     AppConstants.gameEngine.updateUIs(canvas)
                     surfaceHolder.unlockCanvasAndPost(canvas)
                 }

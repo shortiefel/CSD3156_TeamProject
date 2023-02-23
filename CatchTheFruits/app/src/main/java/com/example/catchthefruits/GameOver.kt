@@ -37,6 +37,7 @@ class GameOver : AppCompatActivity() {
     lateinit var highpoints: TextView
     lateinit var newhighpointsIV: ImageView
     lateinit var sharedPref: SharedPreferences
+    var mediaPlayer: MediaPlayer? = null
 
     /**
      * When the activity is created. It sets the layout for the activity and initializes some
@@ -46,7 +47,7 @@ class GameOver : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gameover)
-        PlaySound(R.raw.lose)
+        //playSound(R.raw.lose)
 
         points = findViewById<TextView>(R.id.points)
         highpoints = findViewById<TextView>(R.id.highpoints)
@@ -74,7 +75,7 @@ class GameOver : AppCompatActivity() {
      * is finished using the finish() function.
      * */
     fun restart(view: View){
-        PlaySound(R.raw.buttonclick)
+        playSound(R.raw.buttonclick)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
@@ -85,7 +86,7 @@ class GameOver : AppCompatActivity() {
      *  finishes the current activity using the finish() function.
      * */
     fun exit(view: View){
-        PlaySound(R.raw.buttonclick)
+        playSound(R.raw.buttonclick)
         finish()
     }
 
@@ -95,8 +96,7 @@ class GameOver : AppCompatActivity() {
      * release the MediaPlayer object when the audio is finished playing, and starts the audio
      * using the start() function.
      * */
-    fun PlaySound(resourceID : Int){
-        var mediaPlayer: MediaPlayer? = null
+    fun playSound(resourceID : Int){
         if (mediaPlayer == null) {
 
             mediaPlayer = MediaPlayer.create(this, resourceID)
@@ -104,8 +104,28 @@ class GameOver : AppCompatActivity() {
                 mediaPlayer?.stop()
                 mediaPlayer?.reset()
                 mediaPlayer?.release()
+                mediaPlayer = null
             }
             mediaPlayer?.start()
         }
+    }
+
+    fun stopSound(resourceID: Int){
+        if (mediaPlayer != null){
+            mediaPlayer?.stop()
+            mediaPlayer?.reset()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopSound(R.raw.lose)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        playSound(R.raw.lose)
     }
 }

@@ -37,7 +37,8 @@ class HighscoreActivity : AppCompatActivity() {
     lateinit var highpoints: TextView
     lateinit var newhighpointsIV: ImageView
     lateinit var sharedPref: SharedPreferences
-
+    private var backButtonPlayer: MediaPlayer?  = null
+    private var bgmPlayer: MediaPlayer?  = null
     /**
      * TextView for displaying the player's current score,
      * another TextView for displaying the highest score achieved in previous games,
@@ -54,24 +55,54 @@ class HighscoreActivity : AppCompatActivity() {
         highpoints.setText(""+ highest.toString())
 
         backButton.setOnClickListener{
-            PlaySound(R.raw.buttonclick)
+            if (backButtonPlayer == null) {
+
+                backButtonPlayer = MediaPlayer.create(this, R.raw.buttonclick)
+                backButtonPlayer?.setOnCompletionListener {
+                    backButtonPlayer?.stop()
+                    backButtonPlayer?.reset()
+                    backButtonPlayer?.release()
+                }
+                backButtonPlayer?.start()
+            }
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
     }
 
-    fun PlaySound(resourceID : Int){
-        var mediaPlayer: MediaPlayer? = null
-        if (mediaPlayer == null) {
-
-            mediaPlayer = MediaPlayer.create(this, resourceID)
-            mediaPlayer?.setOnCompletionListener {
-                mediaPlayer?.stop()
-                mediaPlayer?.reset()
-                mediaPlayer?.release()
+    private fun playBgm(){
+        if (bgmPlayer == null)
+        {
+            bgmPlayer = MediaPlayer.create(this, R.raw.bgm)
+            bgmPlayer?.setOnCompletionListener {
+                if (!bgmPlayer!!.isPlaying)
+                {
+                    bgmPlayer?.start()
+                }
             }
-            mediaPlayer?.start()
+            bgmPlayer?.start()
         }
     }
+
+    private fun stopBgm() {
+        if (bgmPlayer != null)
+        {
+            bgmPlayer?.stop()
+            bgmPlayer?.reset()
+            bgmPlayer?.release()
+            bgmPlayer = null
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopBgm()
+    }
+
+    override fun onResume(){
+        super.onResume()
+        playBgm()
+    }
+
 }

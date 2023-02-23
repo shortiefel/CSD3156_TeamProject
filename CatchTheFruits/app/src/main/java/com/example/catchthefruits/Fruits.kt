@@ -49,5 +49,6 @@ class Fruits {
         fruitX = Random.nextInt(AppConstants.SCREEN_WIDTH - AppConstants.bitmapBank.getFruitWidth(frame)!!)
         fruitY = -200 + Random.nextInt(600) * -1
         fruitVelocity = 35 + Random.nextInt(16)
+        playedDroppingSound = false
     }
 }

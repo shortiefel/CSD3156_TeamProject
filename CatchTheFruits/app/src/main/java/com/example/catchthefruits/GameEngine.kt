@@ -49,8 +49,8 @@ class GameEngine {
     var bombs = mutableListOf<Bomb>()
     var explosions = mutableListOf<Explosion>()
     val explosionPlayers = mutableListOf<MediaPlayer>()
-    private val dropPlayers = mutableListOf<MediaPlayer>()
-    private var canPlaySound = true
+    val dropPlayers = mutableListOf<MediaPlayer>()
+    var canPlaySound = true
     val context : Context
     var health : HealthUI
     var points = 0
@@ -249,10 +249,16 @@ class GameEngine {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(context, resourceID)
             mediaPlayer?.setOnCompletionListener {
-                stopPlaying(mediaPlayers)
+                //stopPlaying(mediaPlayers)
+                mediaPlayer?.stop()
+                mediaPlayer?.reset()
+                mediaPlayer?.release()
             }
             mediaPlayer?.start()
-            mediaPlayers.add(mediaPlayer)
+            synchronized(mediaPlayers){
+                mediaPlayers.add(mediaPlayer)
+            }
+
         }
 
     }
@@ -260,15 +266,18 @@ class GameEngine {
 
     private fun stopPlaying(mediaPlayers: MutableList<MediaPlayer>)
     {
-        val iterator = mediaPlayers.iterator()
-        while (iterator.hasNext()) {
-            var mediaPlayer = iterator.next()
-            if (!mediaPlayer.isPlaying) {
-                iterator.remove()
-                mediaPlayer.reset()
-                mediaPlayer.release()
+        synchronized(mediaPlayers){
+            val iterator = mediaPlayers.iterator()
+            while (iterator.hasNext()) {
+                var mediaPlayer = iterator.next()
+                if (!mediaPlayer.isPlaying) {
+                    iterator.remove()
+                    mediaPlayer.reset()
+                    mediaPlayer.release()
+                }
             }
         }
+
     }
 
     /**
@@ -285,19 +294,21 @@ class GameEngine {
     {
         val iteratorExplosion = explosionPlayers.iterator()
         while (iteratorExplosion.hasNext()) {
-            var mediaPlayer = iteratorExplosion.next()
+            var mediaPlayer1: MediaPlayer? = null
+            mediaPlayer1 = iteratorExplosion.next()
+            /*if (mediaPlayer1 != null){
+                if (mediaPlayer1.isPlaying)
+                    mediaPlayer1?.stop()
+                //mediaPlayer1?.reset()*/
+                mediaPlayer1?.release()
             iteratorExplosion.remove()
-            mediaPlayer.stop()
-            mediaPlayer.reset()
-            mediaPlayer.release()
         }
         val iteratorDrop = dropPlayers.iterator()
         while (iteratorDrop.hasNext()) {
-            var mediaPlayer = iteratorDrop.next()
+            var mediaPlayer2: MediaPlayer? = null
+            mediaPlayer2 = iteratorDrop.next()
+            mediaPlayer2?.release()
             iteratorDrop.remove()
-            mediaPlayer.stop()
-            mediaPlayer.reset()
-            mediaPlayer.release()
         }
         canPlaySound = false
     }

@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     private var bgmPlayer: MediaPlayer? = null
     private var playButtonPlayer: MediaPlayer?  = null
-    private var mediaPlayer: MediaPlayer? = null
+    private var highScorePlayer: MediaPlayer?  = null
 
     /**
      * Initializes AppConstants and starts playing the background music with a MediaPlayer object.
@@ -44,19 +44,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         AppConstants.initialization(this.applicationContext)
-
-        if (bgmPlayer == null)
-        {
-            bgmPlayer = MediaPlayer.create(this, R.raw.bgm)
-            bgmPlayer?.setOnCompletionListener {
-                if (!bgmPlayer!!.isPlaying)
-                {
-                    bgmPlayer?.start()
-                }
-            }
-            bgmPlayer?.start()
-        }
-
 
         val playButton : ImageButton = findViewById(R.id.playbtn)
         val hsButton : ImageButton = findViewById(R.id.highscoreBtn)
@@ -72,21 +59,48 @@ class MainActivity : AppCompatActivity() {
                 }
                 playButtonPlayer?.start()
             }
-            if (bgmPlayer != null)
-            {
-                bgmPlayer?.stop()
-                bgmPlayer?.reset()
-                bgmPlayer?.release()
-            }
-            //temp crash fix...is this supposed to be here? -YQ
-            //bgmPlayer?.start()
             startGame(toggleSwitch.isChecked)
         }
 
         hsButton.setOnClickListener{
+            if (highScorePlayer == null) {
+
+                highScorePlayer = MediaPlayer.create(this, R.raw.buttonclick)
+                highScorePlayer?.setOnCompletionListener {
+                    highScorePlayer?.stop()
+                    highScorePlayer?.reset()
+                    highScorePlayer?.release()
+                }
+                highScorePlayer?.start()
+            }
+            stopBgm()
             val intent = Intent(this, HighscoreActivity::class.java)
             startActivity(intent)
             finish()
+        }
+    }
+
+    private fun playBgm(){
+        if (bgmPlayer == null)
+        {
+            bgmPlayer = MediaPlayer.create(this, R.raw.bgm)
+            bgmPlayer?.setOnCompletionListener {
+                if (!bgmPlayer!!.isPlaying)
+                {
+                    bgmPlayer?.start()
+                }
+            }
+            bgmPlayer?.start()
+        }
+    }
+
+    private fun stopBgm() {
+        if (bgmPlayer != null)
+        {
+            bgmPlayer?.stop()
+            bgmPlayer?.reset()
+            bgmPlayer?.release()
+            bgmPlayer = null
         }
     }
 
@@ -95,16 +109,6 @@ class MainActivity : AppCompatActivity() {
      * */
     fun startGame(checked: Boolean) {
 
-        if (mediaPlayer == null) {
-
-            mediaPlayer = MediaPlayer.create(this, R.raw.buttonclick)
-            mediaPlayer?.setOnCompletionListener {
-                mediaPlayer?.stop()
-                mediaPlayer?.reset()
-                mediaPlayer?.release()
-            }
-            mediaPlayer?.start()
-        }
         val intent = Intent(this, GameActivity::class.java)
         intent.putExtra("toggle", checked)
         startActivity(intent)
@@ -112,10 +116,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun exit(view: View){
-        bgmPlayer?.stop()
-        bgmPlayer?.reset()
-        bgmPlayer?.release()
+        stopBgm()
         finish()
     }
 
+    override fun onPause() {
+        super.onPause()
+        stopBgm()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        playBgm()
+    }
 }

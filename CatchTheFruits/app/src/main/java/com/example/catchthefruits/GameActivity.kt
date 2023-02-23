@@ -32,6 +32,7 @@ class GameActivity : Activity() {
         setContentView(gameView)
 
         AppConstants.gameEngine.setOnGameOverListener {
+            //stopPlayingAll()
             showGameOverScreen()
         }
     }
@@ -41,5 +42,34 @@ class GameActivity : Activity() {
         intent.putExtra("points", AppConstants.gameEngine.points)
         startActivity(intent)
         finish()
+    }
+
+    private fun stopPlayingAll()
+    {
+        //synchronized(AppConstants.gameEngine.explosionPlayers) {
+            val iteratorExplosion = AppConstants.gameEngine.explosionPlayers.iterator()
+            while (iteratorExplosion.hasNext()) {
+                var mediaPlayer = iteratorExplosion.next()
+                iteratorExplosion.remove()
+                if (!mediaPlayer.isPlaying) {
+                    // mediaPlayer?.stop()
+                    mediaPlayer?.reset()
+                    mediaPlayer?.release()
+                }
+            }
+       // }
+        //synchronized(AppConstants.gameEngine.dropPlayers) {
+            val iteratorDrop = AppConstants.gameEngine.dropPlayers.iterator()
+            while (iteratorDrop.hasNext()) {
+                var mediaPlayer = iteratorDrop.next()
+                iteratorDrop.remove()
+                if (!mediaPlayer.isPlaying) {
+                    // mediaPlayer?.stop()
+                    mediaPlayer?.reset()
+                    mediaPlayer?.release()
+                }
+            }
+        //}
+        AppConstants.gameEngine.canPlaySound = false
     }
 }
