@@ -10,7 +10,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/gametitle_crop"
+        android:background="@drawable/catch_the_fruits"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/playbtn"
         app:layout_constraintLeft_toLeftOf="parent"
