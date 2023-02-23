@@ -129,7 +129,7 @@ class GameView(context: Context, cheked: Boolean?) : SurfaceView(context), Surfa
         SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
         SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
 
-        val ss = mValuesOrientation[2].toInt() * 100
+        val ss = (mValuesOrientation[2] * 100).toInt()
         AppConstants.gameEngine.basketImage.BasketImageX += ss
         if(AppConstants.gameEngine.basketImage.BasketImageX < 0){
             AppConstants.gameEngine.basketImage.BasketImageX = 0
