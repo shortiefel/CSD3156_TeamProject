@@ -34,10 +34,12 @@ import android.view.SurfaceView
 
 class GameView(context: Context, cheked: Boolean?) : SurfaceView(context), SurfaceHolder.Callback, SensorEventListener {
     private var gameThread: GameThread? = null
+
+    //Array to store the sensor values
     private val mValuesMagnet = FloatArray(3)
     private val mValuesAccel = FloatArray(3)
     private val mValuesOrientation = FloatArray(3)
-
+    //Matrix array to store and to use for computing the rotation matrix
     private val mRotationMatrix = FloatArray(9)
 
     init{
@@ -46,6 +48,8 @@ class GameView(context: Context, cheked: Boolean?) : SurfaceView(context), Surfa
         isFocusable = true
         gameThread = GameThread(holder, this)
         if(cheked == true){
+            //Sets the both accelerometer and magnetic field sensor to be able to listen in the game
+            //only if user toggles on the gyroscope
             AppConstants.sensorEngine.sensorManager.registerListener(this, AppConstants.sensorEngine.acceleSensor, SensorManager.SENSOR_DELAY_NORMAL)
             AppConstants.sensorEngine.sensorManager.registerListener(this, AppConstants.sensorEngine.magfieldSensor, SensorManager.SENSOR_DELAY_NORMAL)
 

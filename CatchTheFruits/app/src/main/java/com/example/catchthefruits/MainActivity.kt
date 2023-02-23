@@ -78,11 +78,10 @@ class MainActivity : AppCompatActivity() {
                 bgmPlayer?.reset()
                 bgmPlayer?.release()
             }
-            //temp crash fix...is this supposed to be here? -YQ
-            //bgmPlayer?.start()
             startGame(toggleSwitch.isChecked)
         }
 
+        //go to the highscore activity
         hsButton.setOnClickListener{
             val intent = Intent(this, HighscoreActivity::class.java)
             startActivity(intent)
@@ -111,6 +110,9 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+    Stops the bgm and exits the app
+     **/
     fun exit(view: View){
         bgmPlayer?.stop()
         bgmPlayer?.reset()
